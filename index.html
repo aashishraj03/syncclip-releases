@@ -34,6 +34,7 @@
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.55;
     padding: 56px 24px 72px;
+    -webkit-text-size-adjust: 100%;
   }
   main { max-width: 560px; margin: 0 auto; }
   .brand { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
@@ -69,8 +70,9 @@
   li {
     counter-increment: step;
     display: grid;
-    grid-template-columns: 36px 1fr;
-    gap: 14px;
+    grid-template-columns: 36px minmax(0, 1fr);
+    column-gap: 14px;
+    align-items: start;
     padding: 18px 0;
     border-top: 1px solid var(--line);
   }
@@ -86,8 +88,17 @@
     display: grid;
     place-items: center;
   }
+  /* Keep all text in the second column so it flows as normal lines */
+  li .step-text { min-width: 0; overflow-wrap: break-word; }
   li p { margin: 0; }
   li small { display: block; color: var(--muted); margin-top: 6px; font-size: 0.95rem; }
+
+  @media (max-width: 480px) {
+    body { padding: 32px 18px 56px; }
+    .brand { margin-bottom: 28px; }
+    .download { padding: 18px 20px; font-size: 1.15rem; }
+    h2 { margin-top: 40px; }
+  }
 </style>
 </head>
 <body>
@@ -108,13 +119,15 @@
 
   <h2>How to install</h2>
   <ol>
-    <li><p>Tap the download button above.</p></li>
-    <li><p>When the download finishes, open the file from your notifications or the Downloads folder.</p></li>
+    <li><div class="step-text"><p>Tap the download button above.</p></div></li>
+    <li><div class="step-text"><p>When the download finishes, open the file from your notifications or the Downloads folder.</p></div></li>
     <li>
-      <p>If Android blocks the install, tap <strong>Settings</strong>, turn on <strong>Allow from this source</strong>, go back, and tap <strong>Install</strong>.</p>
-      <small>If Play Protect shows a warning, tap <strong>More details</strong>, then <strong>Install anyway</strong>.</small>
+      <div class="step-text">
+        <p>If Android blocks the install, tap <strong>Settings</strong>, turn on <strong>Allow from this source</strong>, go back, and tap <strong>Install</strong>.</p>
+        <small>If Play Protect shows a warning, tap <strong>More details</strong>, then <strong>Install anyway</strong>.</small>
+      </div>
     </li>
-    <li><p>Open SyncClip and sign in, or create an account, to link your phone.</p></li>
+    <li><div class="step-text"><p>Open SyncClip and sign in, or create an account, to link your phone.</p></div></li>
   </ol>
 </main>
 </body>
