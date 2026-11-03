@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SyncClip – Download for Android</title>
-<meta name="description" content="SyncClip keeps your clipboard the same across your devices. Download the Android app.">
+<title>SyncClip – Download</title>
+<meta name="description" content="SyncClip keeps your clipboard the same across your devices. Download for Android or install on Mac.">
 <link rel="icon" href="icon.png">
 <style>
   :root {
@@ -14,6 +14,9 @@
     --line: #d5dde3;
     --accent: #0b6e6e;
     --on-accent: #ffffff;
+    --surface: #e4eaee;
+    --code-bg: #0f1c24;
+    --code-ink: #e6f1f0;
     color-scheme: light dark;
   }
   @media (prefers-color-scheme: dark) {
@@ -24,6 +27,9 @@
       --line: #25363f;
       --accent: #3ec1b5;
       --on-accent: #04211f;
+      --surface: #182830;
+      --code-bg: #07110f;
+      --code-ink: #e6f1f0;
     }
   }
   * { box-sizing: border-box; }
@@ -46,7 +52,37 @@
     letter-spacing: -0.025em;
     margin: 0 0 16px;
   }
-  .lead { color: var(--muted); font-size: 1.1rem; margin: 0 0 36px; max-width: 46ch; }
+  .lead { color: var(--muted); font-size: 1.1rem; margin: 0 0 28px; max-width: 46ch; }
+
+  /* Platform toggle */
+  .toggle {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: var(--surface);
+    border-radius: 14px;
+    margin: 0 0 24px;
+  }
+  .toggle button {
+    flex: 1;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 12px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .toggle button[aria-selected="true"] {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .toggle button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+
   .download {
     display: flex;
     align-items: center;
@@ -66,6 +102,47 @@
   .download svg { width: 26px; height: 26px; flex: none; }
   .hint { color: var(--muted); font-size: 0.95rem; margin: 12px 0 0; text-align: center; }
   h2 { font-size: 1.25rem; margin: 56px 0 8px; }
+
+  /* Terminal command box */
+  .cmd {
+    display: flex;
+    align-items: stretch;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .cmd code {
+    flex: 1;
+    min-width: 0;
+    padding: 20px 8px 20px 20px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow-x: auto;
+    display: block;
+  }
+  .copy {
+    flex: none;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--code-ink);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 18px;
+    cursor: pointer;
+  }
+  .copy:hover { background: rgba(255,255,255,0.08); }
+  .copy:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+  .copy svg { width: 20px; height: 20px; flex: none; }
+  .copy.done { color: #6ee7b7; }
+
   ol { list-style: none; counter-reset: step; margin: 0; padding: 0; }
   li {
     counter-increment: step;
@@ -88,7 +165,6 @@
     display: grid;
     place-items: center;
   }
-  /* Keep all text in the second column so it flows as normal lines */
   li .step-text { min-width: 0; overflow-wrap: break-word; }
   li p { margin: 0; }
   li small { display: block; color: var(--muted); margin-top: 6px; font-size: 0.95rem; }
@@ -98,6 +174,8 @@
     .brand { margin-bottom: 28px; }
     .download { padding: 18px 20px; font-size: 1.15rem; }
     h2 { margin-top: 40px; }
+    .copy span { display: none; }
+    .copy { padding: 0 16px; }
   }
 </style>
 </head>
@@ -111,24 +189,121 @@
   <h1>Copy on one device. Paste on another.</h1>
   <p class="lead">SyncClip keeps your clipboard the same across your devices, for both text and files.</p>
 
-  <a class="download" href="https://github.com/aashishraj03/syncclip-releases/releases/latest/download/SyncClip.apk" download>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>
-    Download SyncClip for Android
-  </a>
-  <p class="hint">Free APK file for Android phones</p>
+  <div class="toggle" role="tablist" aria-label="Choose your device">
+    <button type="button" role="tab" id="tab-android" data-platform="android" aria-controls="panel-android" aria-selected="true">Android</button>
+    <button type="button" role="tab" id="tab-mac" data-platform="mac" aria-controls="panel-mac" aria-selected="false" tabindex="-1">Mac</button>
+  </div>
 
-  <h2>How to install</h2>
-  <ol>
-    <li><div class="step-text"><p>Tap the download button above.</p></div></li>
-    <li><div class="step-text"><p>When the download finishes, open the file from your notifications or the Downloads folder.</p></div></li>
-    <li>
-      <div class="step-text">
-        <p>If Android blocks the install, tap <strong>Settings</strong>, turn on <strong>Allow from this source</strong>, go back, and tap <strong>Install</strong>.</p>
-        <small>If Play Protect shows a warning, tap <strong>More details</strong>, then <strong>Install anyway</strong>.</small>
-      </div>
-    </li>
-    <li><div class="step-text"><p>Open SyncClip and sign in, or create an account, to link your phone.</p></div></li>
-  </ol>
+  <!-- ANDROID -->
+  <section id="panel-android" role="tabpanel" aria-labelledby="tab-android" data-panel="android">
+    <a class="download" href="https://github.com/aashishraj03/syncclip-releases/releases/latest/download/SyncClip.apk" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>
+      Download SyncClip for Android
+    </a>
+    <p class="hint">Free APK file for Android phones</p>
+
+    <h2>How to install</h2>
+    <ol>
+      <li><div class="step-text"><p>Tap the download button above.</p></div></li>
+      <li><div class="step-text"><p>When the download finishes, open the file from your notifications or the Downloads folder.</p></div></li>
+      <li>
+        <div class="step-text">
+          <p>If Android blocks the install, tap <strong>Settings</strong>, turn on <strong>Allow from this source</strong>, go back, and tap <strong>Install</strong>.</p>
+          <small>If Play Protect shows a warning, tap <strong>More details</strong>, then <strong>Install anyway</strong>.</small>
+        </div>
+      </li>
+      <li><div class="step-text"><p>Open SyncClip and start a new connection with a code or QR to share your clipboard.</p></div></li>
+    </ol>
+  </section>
+
+  <!-- MAC -->
+  <section id="panel-mac" role="tabpanel" aria-labelledby="tab-mac" data-panel="mac" hidden>
+    <div class="cmd">
+      <code id="mac-cmd">curl -fsSL https://raw.githubusercontent.com/aashishraj03/syncclip-releases/main/install.sh | bash</code>
+      <button type="button" class="copy" id="copy-btn" aria-label="Copy install command">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
+        <span id="copy-label">Copy</span>
+      </button>
+    </div>
+    <p class="hint">One command installs SyncClip on your Mac</p>
+
+    <h2>How to install</h2>
+    <ol>
+      <li><div class="step-text"><p>Copy the command above.</p></div></li>
+      <li><div class="step-text"><p>Open <strong>Terminal</strong> on your Mac.</p></div></li>
+      <li><div class="step-text"><p>Paste the command and press <strong>Return</strong>.</p></div></li>
+      <li><div class="step-text"><p>Open SyncClip and start a new connection with a code or QR to share your clipboard.</p></div></li>
+    </ol>
+  </section>
 </main>
+
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.toggle [role="tab"]'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('[data-panel]'));
+
+  function show(platform) {
+    tabs.forEach(function (t) {
+      var on = t.getAttribute('data-platform') === platform;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    panels.forEach(function (p) {
+      p.hidden = p.getAttribute('data-panel') !== platform;
+    });
+  }
+
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () {
+      show(t.getAttribute('data-platform'));
+    });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        var next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        next.focus();
+        show(next.getAttribute('data-platform'));
+      }
+    });
+  });
+
+  // Android is the default; /#mac opens the Mac view directly
+  if (location.hash === '#mac') show('mac');
+
+  // Copy button
+  var btn = document.getElementById('copy-btn');
+  var label = document.getElementById('copy-label');
+  var cmd = document.getElementById('mac-cmd');
+
+  function flash() {
+    btn.classList.add('done');
+    label.textContent = 'Copied';
+    setTimeout(function () {
+      btn.classList.remove('done');
+      label.textContent = 'Copy';
+    }, 2000);
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); flash(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  btn.addEventListener('click', function () {
+    var text = cmd.textContent.trim();
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(flash, function () { fallbackCopy(text); });
+    } else {
+      fallbackCopy(text);
+    }
+  });
+})();
+</script>
 </body>
 </html>
